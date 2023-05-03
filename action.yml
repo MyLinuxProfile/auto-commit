@@ -1,0 +1,21 @@
+name: 'Git Action'
+
+runs:
+  using: "composite"
+  steps:
+    - name: 📝 Git Config
+      run: |
+        git config --global user.email ${{secrets.GIT_EMAIL}}
+        git config --global user.name ${{secrets.GIT_NAME}}
+      shell: bash
+
+    - name: 📝 Git Process
+      run: |
+        if [[ `git status --porcelain` ]]; then
+          git add --all
+          git commit -a -m "🤖 BOOT: Update"
+          git push origin HEAD:master --force
+        else
+          echo "WARNING: No changes were detected. git commit push action aborted."
+        fi
+      shell: bash
